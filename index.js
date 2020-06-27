@@ -1,15 +1,14 @@
 'use strict';
 
 const Discord = require('discord.js');
-const envKeys = require('.env');
 const bot = new Discord.Client();
 const fetch = require("node-fetch");
 const prefix = '.';
-const token = envKeys.BOT_TOKEN;
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 const keys = require('./keys.json');
+const token = keys.bot_token;
 const { send } = require('process');
 const client = new google.auth.JWT(
     keys.client_email,
@@ -23,7 +22,7 @@ let json;
 let pastebinUrl = "https://pastebin.com/eeCideBi";
 
 (async () => {
-    let response = await fetch("https://discord.com/api/users/124501230369243136", { headers: {"Authorization": "Bot " + envKeys.BOT_TOKEN} });
+    let response = await fetch("https://discord.com/api/users/124501230369243136", { headers: {"Authorization": "Bot " + token} });
     json = await response.json();
 })();
 
@@ -40,7 +39,7 @@ client.authorize(function(err,tokens){
 async function gsrun(cl){
     const gsapi = google.sheets({version:'v4', auth: cl});
     const opt = {
-        spreadsheetId: envKeys.SPREADSHEET_ID,
+        spreadsheetId: keys.spreadsheet_id,
         range: 'Switches!H2:H'
     };
     let data = await gsapi.spreadsheets.values.get(opt);
@@ -106,7 +105,7 @@ bot.on('message', message => {
 async function getswitchinfo(cl, row, msg){
     const gsapi = google.sheets({version:'v4', auth: cl});
     const opt = {
-        spreadsheetId: envKeys.SPREADSHEET_ID,
+        spreadsheetId: keys.spreadsheet_id,
         range: `Switches!A${row}:I${row}`
     };
     let data = await gsapi.spreadsheets.values.get(opt);
